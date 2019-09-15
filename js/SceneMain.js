@@ -92,6 +92,14 @@ class SceneMain extends Phaser.Scene {
         playerLaser.destroy();
       }
     });
+    this.physics.add.collider(this.player, this.enemies, function (player, enemy) {
+      if (enemy) {
+        if (player.onDestroy !== undefined) {
+          player.explode(false)
+          player.onDestroy()
+        }
+      }
+    });
     this.physics.add.overlap(this.player, this.enemyLasers, function (player, laser) {
       if (!player.getData("isDead") &&
         !laser.getData("isDead")) {
@@ -100,6 +108,7 @@ class SceneMain extends Phaser.Scene {
         laser.destroy();
       }
     });
+
     this.time.addEvent({
       delay: 1000,
       callback: function () {
