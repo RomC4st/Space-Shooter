@@ -42,7 +42,6 @@ class Player extends Entity {
     this.setData("isShooting", false);
     this.setData("timerShootDelay", 10);
     this.setData("timerShootTick", this.getData("timerShootDelay") - 1);
-
   }
   moveUp() {
     this.body.velocity.y = -this.getData("speed");
@@ -99,7 +98,6 @@ class EnemyLaser extends Entity {
     this.body.velocity.y = 200;
   }
 }
-
 class ChaserShip extends Entity {
   constructor(scene, x, y) {
     super(scene, x, y, "sprEnemy1", "ChaserShip");

@@ -1,6 +1,7 @@
 class SceneMain extends Phaser.Scene {
   constructor() {
     super({ key: "SceneMain" });
+
   }
   preload() {
     this.load.image("sprBg0", "content/sprBg0.png");
@@ -73,6 +74,10 @@ class SceneMain extends Phaser.Scene {
       this.game.config.height * 0.5,
       "sprPlayer"
     );
+    var scoreText;
+    var score = 0;
+    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '16px', fill: '#fff' });
+
     this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
     this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
     this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
@@ -87,6 +92,8 @@ class SceneMain extends Phaser.Scene {
       if (enemy) {
         if (enemy.onDestroy !== undefined) {
           enemy.onDestroy();
+          score += 10;
+          scoreText.setText('score: ' + score);
         }
         enemy.explode(true);
         playerLaser.destroy();
