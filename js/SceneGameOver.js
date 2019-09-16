@@ -2,7 +2,7 @@ class SceneGameOver extends Phaser.Scene {
   constructor() {
     super({ key: "SceneGameOver" });
   }
-  
+
   create() {
 
     this.title = this.add.text(this.game.config.width * 0.5, 128, `GAME OVER`, {
@@ -44,6 +44,10 @@ class SceneGameOver extends Phaser.Scene {
     }, this);
     this.btnRestart.on("pointerup", function () {
       this.btnRestart.setTexture("sprBtnRestart");
+      // for all properties
+      for (const prop of Object.getOwnPropertyNames(score)) {
+        delete score[prop];
+      }
       this.scene.start("SceneMain");
     }, this);
     this.backgrounds = [];

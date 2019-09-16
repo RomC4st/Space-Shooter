@@ -34,6 +34,8 @@ class SceneMain extends Phaser.Scene {
     this.load.audio("sndExplode0", "content/sndExplode0.wav");
     this.load.audio("sndExplode1", "content/sndExplode1.wav");
     this.load.audio("sndLaser", "content/sndLaser.wav");
+    score.points = 0
+    score.scoreText = ''
   }
   create() {
     this.anims.create({
@@ -68,7 +70,7 @@ class SceneMain extends Phaser.Scene {
       ],
       laser: this.sound.add("sndLaser")
     };
-    
+
     this.sfx.music.play();
     this.sfx.laser.volume = 0.3
     this.sfx.explosions.volume = 0.5
