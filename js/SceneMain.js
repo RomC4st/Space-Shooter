@@ -1,5 +1,7 @@
-var scoreText;
-var score = 0;
+score = {
+  scoreText: '',
+  points: 0
+}
 
 class SceneMain extends Phaser.Scene {
   constructor() {
@@ -81,8 +83,8 @@ class SceneMain extends Phaser.Scene {
       this.game.config.height * 0.5,
       "sprPlayer"
     );
-    
-    scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '16px', fill: '#fff' });
+
+    score.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '16px', fill: '#fff' });
 
     this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
     this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
@@ -98,8 +100,8 @@ class SceneMain extends Phaser.Scene {
       if (enemy) {
         if (enemy.onDestroy !== undefined) {
           enemy.onDestroy();
-          score += 10;
-          scoreText.setText('score: ' + score);
+          score.points += 10;
+          score.scoreText.setText('score: ' + score.points);
         }
         enemy.explode(true);
         playerLaser.destroy();

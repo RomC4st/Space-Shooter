@@ -11,7 +11,7 @@ class SceneGameOver extends Phaser.Scene {
       color: '#ffffff',
       align: 'center'
     });
-    this.displayscore = this.add.text(this.game.config.width * 0.5, 128, `${score} points`, {
+    this.displayscore = this.add.text(this.game.config.width * 0.5, 128, `${score.points} points`, {
       fontFamily: 'monospace',
       fontSize: 38,
       fontStyle: 'bold',
@@ -19,7 +19,7 @@ class SceneGameOver extends Phaser.Scene {
       align: 'center'
     });
     this.title.setOrigin(0.5);
-    this.displayscore.setOrigin(0.5,-0.5)
+    this.displayscore.setOrigin(0.5, -0.5)
     this.sfx = {
       btnOver: this.sound.add("sndBtnOver"),
       btnDown: this.sound.add("sndBtnDown")
