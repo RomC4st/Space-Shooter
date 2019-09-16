@@ -77,6 +77,7 @@ class Player extends Entity {
     this.scene.time.addEvent({ // go to game over scene
       delay: 1000,
       callback: function () {
+        this.scene.sfx.music.stop();
         this.scene.scene.start("SceneGameOver");
       },
       callbackScope: this,

@@ -68,6 +68,7 @@ class SceneMain extends Phaser.Scene {
       ],
       laser: this.sound.add("sndLaser")
     };
+    
     this.sfx.music.play();
     this.sfx.laser.volume = 0.3
     this.sfx.explosions.volume = 0.5

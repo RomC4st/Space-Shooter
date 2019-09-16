@@ -2,6 +2,7 @@ class SceneGameOver extends Phaser.Scene {
   constructor() {
     super({ key: "SceneGameOver" });
   }
+  
   create() {
 
     this.title = this.add.text(this.game.config.width * 0.5, 128, `GAME OVER`, {
@@ -22,7 +23,7 @@ class SceneGameOver extends Phaser.Scene {
     this.displayscore.setOrigin(0.5, -0.5)
     this.sfx = {
       btnOver: this.sound.add("sndBtnOver"),
-      btnDown: this.sound.add("sndBtnDown")
+      btnDown: this.sound.add("sndBtnDown"),
     };
     this.btnRestart = this.add.sprite(
       this.game.config.width * 0.5,
