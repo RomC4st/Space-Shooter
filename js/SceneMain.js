@@ -25,6 +25,7 @@ class SceneMain extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 16
     });
+    this.load.audio("SoundLvl1", "content/SoundLvl1.mp3");
     this.load.audio("sndExplode0", "content/sndExplode0.wav");
     this.load.audio("sndExplode1", "content/sndExplode1.wav");
     this.load.audio("sndLaser", "content/sndLaser.wav");
@@ -56,12 +57,14 @@ class SceneMain extends Phaser.Scene {
       repeat: -1
     });
     this.sfx = {
+      music: this.sound.add("SoundLvl1"),
       explosions: [
         this.sound.add("sndExplode0"),
         this.sound.add("sndExplode1")
       ],
       laser: this.sound.add("sndLaser")
     };
+    this.sfx.music.play()
     this.backgrounds = [];
     for (var i = 0; i < 5; i++) { // create five scrolling backgrounds
       var bg = new ScrollingBackground(this, "sprBg0", i * 10);
