@@ -44,11 +44,14 @@ class SceneGameOver extends Phaser.Scene {
     }, this);
     this.btnRestart.on("pointerup", function () {
       this.btnRestart.setTexture("sprBtnRestart");
-      // for all properties
+      // delete all properties of object score
+      const difficulty_options = score.difficulty
       for (const prop of Object.getOwnPropertyNames(score)) {
         delete score[prop];
       }
+      score["difficulty"] = difficulty_options
       this.scene.start("SceneMain");
+      // console.log(this.Player)
     }, this);
     this.backgrounds = [];
     for (var i = 0; i < 5; i++) {

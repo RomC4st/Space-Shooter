@@ -5,8 +5,11 @@ class SceneMainMenu extends Phaser.Scene {
   preload() {
     this.load.image("sprBg0", "content/sprBg0.png");
     this.load.image("sprBg1", "content/sprBg1.png");
-    this.load.image("sprBtnPlay", "content/sprBtnPlay.png");
-    this.load.image("sprBtnPlayHover", "content/sprBtnPlayHover.png");
+    // this.load.image("sprBtnPlay", "content/sprBtnPlay.png");
+    this.load.image("EasyMode", "content/easy.png");
+    this.load.image("HardMode", "content/hard.png");
+    this.load.image("EasyModeDown", "content/easyDown.png");
+    this.load.image("HardModeDown", "content/hardDown.png");
     this.load.image("sprBtnPlayDown", "content/sprBtnPlayDown.png");
     this.load.image("sprBtnRestart", "content/sprBtnRestart.png");
     this.load.image("sprBtnRestartHover", "content/sprBtnRestartHover.png");
@@ -19,30 +22,47 @@ class SceneMainMenu extends Phaser.Scene {
       btnOver: this.sound.add("sndBtnOver"),
       btnDown: this.sound.add("sndBtnDown")
     };
-    this.btnPlay = this.add.sprite(
+    this.btnPlayEasy = this.add.sprite(
       this.game.config.width * 0.5,
       this.game.config.height * 0.5,
-      "sprBtnPlay"
+      "EasyMode"
     );
+    this.btnPlayHard = this.add.sprite(
+      this.game.config.width * 0.5,
+      this.game.config.height * 0.5,
+      "HardMode"
+    );
+    this.btnPlayEasy.setInteractive();
+    this.btnPlayHard.setInteractive();
 
-    this.btnPlay.setInteractive();
-    this.btnPlay.on("pointerover", function () {
-      this.btnPlay.setTexture("sprBtnPlayHover"); // set the button texture to sprBtnPlayHover
+    this.btnPlayEasy.on("pointerover", function () {
+       this.btnPlayEasy.setTexture("EasyModeDown");
+      // set the button texture to sprBtnPlayHover
       this.sfx.btnOver.play(); // play the button over sound
     }, this);
 
-    this.btnPlay.on("pointerout", function () {
-      this.setTexture("sprBtnPlay");
-    });
-
-    this.btnPlay.on("pointerdown", function () {
-      this.btnPlay.setTexture("sprBtnPlayDown");
-      this.sfx.btnDown.play();
+    this.btnPlayHard.on("pointerover", function () {
+       this.btnPlayHard.setTexture("HardModeDown");
+      // set the button texture to sprBtnPlayHover
+      this.sfx.btnOver.play(); // play the button over sound
     }, this);
 
-    this.btnPlay.on("pointerup", function () {
+    this.btnPlayEasy.on("pointerout", function () {
+       this.setTexture("EasyMode")
+    });
+    this.btnPlayHard.on("pointerout", function () {
+      this.setTexture("HardMode");
+    }) ;
+
+    this.btnPlayEasy.on("pointerup", function () {
+      score.difficulty=0
       this.scene.start("SceneMain");
     }, this);
+    this.btnPlayHard.on("pointerup", function () {
+      score.difficulty=1
+      this.scene.start("SceneMain");
+    }, this);
+
     this.title = this.add.text(this.game.config.width * 0.5, 128, "SPACE SHOOTER", {
       fontFamily: 'monospace',
       fontSize: 48,
@@ -50,6 +70,7 @@ class SceneMainMenu extends Phaser.Scene {
       color: '#ffffff',
       align: 'center'
     });
+    this.btnPlayHard.setOrigin(0.5,-0.7)
     this.title.setOrigin(0.5);
     this.backgrounds = [];
     for (var i = 0; i < 5; i++) {

@@ -1,6 +1,7 @@
 score = {
   scoreText: '',
-  points: 0
+  points: 0,
+  difficulty: 0
 }
 
 class SceneMain extends Phaser.Scene {
@@ -128,7 +129,7 @@ class SceneMain extends Phaser.Scene {
     });
 
     this.time.addEvent({
-      delay: 1000,
+      delay: score.difficulty === 0 ? 1000 : 100,
       callback: function () {
         var enemy = null;
         if (Phaser.Math.Between(0, 10) >= 3) {
