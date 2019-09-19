@@ -13,8 +13,8 @@ class SceneMain extends Phaser.Scene {
     this.load.image("sprBg0", "content/sprBg0.png");
     this.load.image("sprBg1", "content/sprBg1.png");
     this.load.spritesheet("sprExplosion", "content/sprExplosion.png", {
-      frameWidth: 32,
-      frameHeight: 32
+      frameWidth: 34,
+      frameHeight: 34
     });
     this.load.spritesheet("sprEnemy0", "content/sprEnemy0.png", {
       frameWidth: 16,
@@ -28,8 +28,8 @@ class SceneMain extends Phaser.Scene {
     this.load.image("sprLaserEnemy0", "content/sprLaserEnemy0.png");
     this.load.image("sprLaserPlayer", "content/sprLaserPlayer.png");
     this.load.spritesheet("sprPlayer", "content/sprPlayer.png", {
-      frameWidth: 16,
-      frameHeight: 16
+      frameWidth: 28,
+      frameHeight: 21
     });
     this.load.audio("SoundLvl1", "content/SoundLvl1.mp3");
     this.load.audio("sndExplode0", "content/sndExplode0.wav");
@@ -95,6 +95,7 @@ class SceneMain extends Phaser.Scene {
     this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
     this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
+    this.restart = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
 
     this.playerLasers = this.add.group();
     this.enemies = this.add.group();
@@ -167,6 +168,9 @@ class SceneMain extends Phaser.Scene {
   update() {
     if (!this.player.getData("isDead")) {
       this.player.update();
+      // if (score.points > 50) {
+      //   this.scene.start("SceneBossLvl1")
+      // }
       if (this.up.isDown) {
         this.player.moveUp();
       }
@@ -182,6 +186,11 @@ class SceneMain extends Phaser.Scene {
       if (this.space.isDown) {
         this.player.setData("isShooting", true);
       }
+      else if (this.restart.isDown) {
+        this.sfx.music.stop()
+        this.scene.start("SceneMainMenu");
+      }
+    
       else {
         this.player.setData("timerShootTick", this.player.getData("timerShootDelay") - 1);
         this.player.setData("isShooting", false);

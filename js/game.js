@@ -12,7 +12,8 @@ var config = {
   scene: [
     SceneMainMenu,
     SceneMain,
-    SceneGameOver
+    SceneGameOver,
+    SceneBossLvl1
   ],
   pixelArt: true,
   roundPixels: true
