@@ -1,7 +1,9 @@
-score = {
+options = {
   scoreText: '',
   points: 0,
-  difficulty: 0
+  difficulty: 0,
+  life: 3,
+  livesText: ''
 }
 
 class SceneMain extends Phaser.Scene {
@@ -35,8 +37,10 @@ class SceneMain extends Phaser.Scene {
     this.load.audio("sndExplode0", "content/sndExplode0.wav");
     this.load.audio("sndExplode1", "content/sndExplode1.wav");
     this.load.audio("sndLaser", "content/sndLaser.wav");
-    score.points = 0
-    score.scoreText = ''
+    options.points = 0
+    options.scoreText = ''
+    options.life = 3
+    options.livesText = ''
   }
   create() {
     this.anims.create({
@@ -88,7 +92,8 @@ class SceneMain extends Phaser.Scene {
       "sprPlayer"
     );
 
-    score.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '16px', fill: '#fff' });
+    options.scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '16px', fill: '#fff' });
+    options.livesText = this.add.text(16, 40, 'lives: 3', { fontSize: '16px', fill: '#fff' });
 
     this.up = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.UP);
     this.down = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.DOWN);
@@ -105,8 +110,8 @@ class SceneMain extends Phaser.Scene {
       if (enemy) {
         if (enemy.onDestroy !== undefined) {
           enemy.onDestroy();
-          score.points += 10;
-          score.scoreText.setText('score: ' + score.points);
+          options.points += 10;
+          options.scoreText.setText('score: ' + options.points);
         }
         enemy.explode(true);
         playerLaser.destroy();
@@ -120,17 +125,25 @@ class SceneMain extends Phaser.Scene {
         }
       }
     });
-    this.physics.add.overlap(this.player, this.enemyLasers, function (player, laser) {
+    this.physics.add.overlap(this.player, this.enemyLasers,  function (player, laser) {
       if (!player.getData("isDead") &&
         !laser.getData("isDead")) {
-        player.explode(false);
-        player.onDestroy();
-        laser.destroy();
+        if (options.life > 0) {
+          options.life -= 1;
+          options.livesText.setText('lives: ' + options.life);
+          player.explode(false,laser);
+          laser.destroy();
+        } if (options.life === 0) {
+          player.explode(false);
+          player.onDestroy();
+          laser.destroy();
+        }
+
       }
     });
 
     this.time.addEvent({
-      delay: score.difficulty === 0 ? 1000 : 100,
+      delay: options.difficulty === 0 ? 1000 : 100,
       callback: function () {
         var enemy = null;
         if (Phaser.Math.Between(0, 10) >= 3) {
@@ -168,7 +181,7 @@ class SceneMain extends Phaser.Scene {
   update() {
     if (!this.player.getData("isDead")) {
       this.player.update();
-      // if (score.points > 50) {
+      // if (options.points > 50) {
       //   this.scene.start("SceneBossLvl1")
       // }
       if (this.up.isDown) {
@@ -190,7 +203,7 @@ class SceneMain extends Phaser.Scene {
         this.sfx.music.stop()
         this.scene.start("SceneMainMenu");
       }
-    
+
       else {
         this.player.setData("timerShootTick", this.player.getData("timerShootDelay") - 1);
         this.player.setData("isShooting", false);

@@ -12,7 +12,7 @@ class SceneGameOver extends Phaser.Scene {
       color: '#ffffff',
       align: 'center'
     });
-    this.displayscore = this.add.text(this.game.config.width * 0.5, 128, `${score.points} points`, {
+    this.displayscore = this.add.text(this.game.config.width * 0.5, 128, `${options.points} points`, {
       fontFamily: 'monospace',
       fontSize: 38,
       fontStyle: 'bold',
@@ -44,12 +44,12 @@ class SceneGameOver extends Phaser.Scene {
     }, this);
     this.btnRestart.on("pointerup", function () {
       this.btnRestart.setTexture("sprBtnRestart");
-      // delete all properties of object score
-      const difficulty_options = score.difficulty
-      for (const prop of Object.getOwnPropertyNames(score)) {
-        delete score[prop];
+      // delete all properties of object options
+      const difficulty_options = options.difficulty
+      for (const prop of Object.getOwnPropertyNames(options)) {
+        delete options[prop];
       }
-      score["difficulty"] = difficulty_options
+      options["difficulty"] = difficulty_options
       this.scene.start("SceneMain");
       // console.log(this.Player)
     }, this);

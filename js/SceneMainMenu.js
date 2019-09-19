@@ -55,11 +55,11 @@ class SceneMainMenu extends Phaser.Scene {
     }) ;
 
     this.btnPlayEasy.on("pointerup", function () {
-      score.difficulty=0
+      options.difficulty=0
       this.scene.start("SceneMain");
     }, this);
     this.btnPlayHard.on("pointerup", function () {
-      score.difficulty=1
+      options.difficulty=1
       this.scene.start("SceneMain");
     }, this);
 
