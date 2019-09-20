@@ -46,10 +46,14 @@ class SceneGameOver extends Phaser.Scene {
       this.btnRestart.setTexture("sprBtnRestart");
       // delete all properties of object options
       const difficulty_options = options.difficulty
+      const bossLives = options.bossLvl1Life
+      const bossLvl = options.bossLvl1
       for (const prop of Object.getOwnPropertyNames(options)) {
         delete options[prop];
       }
       options["difficulty"] = difficulty_options
+      options["bossLvl1Life"] = bossLives
+      options["bossLvl1"] = bossLvl
       this.scene.start("SceneMain");
       // console.log(this.Player)
     }, this);
