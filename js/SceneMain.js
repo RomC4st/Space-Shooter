@@ -3,7 +3,9 @@ options = {
   points: 0,
   difficulty: 0,
   life: 3,
-  livesText: ''
+  livesText: '',
+  bossLvl1: true,
+  bossLvl1Life: 15
 }
 
 class SceneMain extends Phaser.Scene {
@@ -23,6 +25,7 @@ class SceneMain extends Phaser.Scene {
       frameHeight: 16
     });
     this.load.image("sprEnemy1", "content/sprEnemy1.png");
+    this.load.image("boss", "content/boss.png");
     this.load.spritesheet("sprEnemy2", "content/sprEnemy2.png", {
       frameWidth: 16,
       frameHeight: 16
@@ -32,6 +35,10 @@ class SceneMain extends Phaser.Scene {
     this.load.spritesheet("sprPlayer", "content/sprPlayer.png", {
       frameWidth: 28,
       frameHeight: 21
+    });
+    this.load.spritesheet("deathRay", "content/death-ray.png", {
+      frameWidth: 39,
+      frameHeight: 39
     });
     this.load.audio("SoundLvl1", "content/SoundLvl1.mp3");
     this.load.audio("sndExplode0", "content/sndExplode0.wav");
@@ -43,9 +50,16 @@ class SceneMain extends Phaser.Scene {
     options.livesText = ''
   }
   create() {
+    this.timerEvent = this.time.addEvent({ delay: 10000, repeat: 9 });
     this.anims.create({
       key: "sprEnemy0",
       frames: this.anims.generateFrameNumbers("sprEnemy0"),
+      frameRate: 20,
+      repeat: -1
+    });
+    this.anims.create({
+      key: "boss",
+      frames: this.anims.generateFrameNumbers("boss"),
       frameRate: 20,
       repeat: -1
     });
@@ -108,7 +122,10 @@ class SceneMain extends Phaser.Scene {
 
     this.physics.add.collider(this.playerLasers, this.enemies, function (playerLaser, enemy) {
       if (enemy) {
-        if (enemy.onDestroy !== undefined) {
+        if (enemy.getData('type') === 'BossLvl1' && options.bossLvl1Life > 0) {
+          return (enemy.body.collideWorldBounds = false, playerLaser.destroy(), options.bossLvl1Life -= 1)
+        }
+        else if (enemy.onDestroy !== undefined) {
           enemy.onDestroy();
           options.points += 10;
           options.scoreText.setText('score: ' + options.points);
@@ -125,13 +142,13 @@ class SceneMain extends Phaser.Scene {
         }
       }
     });
-    this.physics.add.overlap(this.player, this.enemyLasers,  function (player, laser) {
+    this.physics.add.overlap(this.player, this.enemyLasers, function (player, laser) {
       if (!player.getData("isDead") &&
         !laser.getData("isDead")) {
         if (options.life > 0) {
           options.life -= 1;
           options.livesText.setText('lives: ' + options.life);
-          player.explode(false,laser);
+          player.explode(false, laser);
           laser.destroy();
         } if (options.life === 0) {
           player.explode(false);
@@ -146,6 +163,16 @@ class SceneMain extends Phaser.Scene {
       delay: options.difficulty === 0 ? 1000 : 100,
       callback: function () {
         var enemy = null;
+
+        if (options.bossLvl1 === true && options.points > 500) {
+          enemy = new BossLvl1(
+            this,
+            Phaser.Math.Between(0, 0),
+            180
+          );
+          this.enemies.add(enemy);
+          options.bossLvl1 = !options.bossLvl1
+        }
         if (Phaser.Math.Between(0, 10) >= 3) {
           enemy = new GunShip(
             this,
@@ -179,6 +206,7 @@ class SceneMain extends Phaser.Scene {
     });
   }
   update() {
+
     if (!this.player.getData("isDead")) {
       this.player.update();
       // if (options.points > 50) {
@@ -211,12 +239,19 @@ class SceneMain extends Phaser.Scene {
     }
     for (var i = 0; i < this.enemies.getChildren().length; i++) {
       var enemy = this.enemies.getChildren()[i];
+
+      if (enemy.getData('type') === 'BossLvl1') {
+        enemy.body.collideWorldBounds = true,
+          enemy.body.bounce.set(0.8)
+      }
+
       enemy.update();
       if (enemy.x < -enemy.displayWidth ||
         enemy.x > this.game.config.width + enemy.displayWidth ||
         enemy.y < -enemy.displayHeight * 4 ||
         enemy.y > this.game.config.height + enemy.displayHeight) {
         if (enemy) {
+
           if (enemy.onDestroy !== undefined) {
             enemy.onDestroy();
           }

@@ -104,6 +104,12 @@ class EnemyLaser extends Entity {
     this.body.velocity.y = 200;
   }
 }
+class BossLvl1Laser extends Entity {
+  constructor(scene, x, y) {
+    super(scene, x, y, "deathRay");
+    this.body.velocity.y = 200;
+  }
+}
 class ChaserShip extends Entity {
   constructor(scene, x, y) {
     super(scene, x, y, "sprEnemy1", "ChaserShip");
@@ -182,6 +188,8 @@ class CarrierShip extends Entity {
     this.body.velocity.y = Phaser.Math.Between(50, 100);
   }
 }
+
+
 
 class ScrollingBackground {
   constructor(scene, key, velocityY) {
