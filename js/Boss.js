@@ -21,12 +21,19 @@ class BossLvl1 extends Entity {
     this.shootTimer = this.scene.time.addEvent({
       delay: 500,
       callback: function () {
-        var laser = new BossLvl1Laser(
+        var laserBoss = new BossLvl1Laser(
           this.scene,
           this.x,
           this.y
         );
+        var laser = new EnemyLaser(
+          this.scene,
+          this.x,
+          this.y
+        );
+        laserBoss.setScale(this.scaleX);
         laser.setScale(this.scaleX);
+        this.scene.enemyLasers.add(laserBoss);
         this.scene.enemyLasers.add(laser);
       },
       callbackScope: this,
@@ -37,7 +44,7 @@ class BossLvl1 extends Entity {
     if (this.shootTimer !== undefined) {
       if (this.shootTimer) {
         this.shootTimer.remove(false);
-        
+
       }
     }
   }
