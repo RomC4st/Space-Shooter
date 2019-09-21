@@ -25,7 +25,7 @@ class SceneMain extends Phaser.Scene {
       frameHeight: 16
     });
     this.load.image("sprEnemy1", "content/sprEnemy1.png");
-    this.load.image("boss", "content/boss.png");
+    this.load.image("boss", "content/sprBossLvl1.png");
     this.load.spritesheet("sprEnemy2", "content/sprEnemy2.png", {
       frameWidth: 16,
       frameHeight: 16
@@ -123,9 +123,13 @@ class SceneMain extends Phaser.Scene {
     this.physics.add.collider(this.playerLasers, this.enemies, function (playerLaser, enemy) {
       if (enemy) {
         if (enemy.getData('type') === 'BossLvl1' && options.bossLvl1Life > 0) {
-          return (enemy.body.collideWorldBounds = false, playerLaser.destroy(), options.bossLvl1Life -= 1)
+          return (
+            enemy.body.collideWorldBounds = false,
+            playerLaser.destroy(),
+            options.bossLvl1Life -= 1)
         }
         else if (enemy.onDestroy !== undefined) {
+
           enemy.onDestroy();
           options.points += 10;
           options.scoreText.setText('score: ' + options.points);

@@ -12,7 +12,8 @@ var config = {
   scene: [
     SceneMainMenu,
     SceneMain,
-    SceneGameOver
+    SceneGameOver,
+    SceneEnd
   ],
   pixelArt: true,
   roundPixels: true
