@@ -26,15 +26,8 @@ class BossLvl1 extends Entity {
           this.x,
           this.y
         );
-        var laser = new EnemyLaser(
-          this.scene,
-          this.x,
-          this.y
-        );
         laserBoss.setScale(this.scaleX);
-        laser.setScale(this.scaleX);
         this.scene.enemyLasers.add(laserBoss);
-        this.scene.enemyLasers.add(laser);
       },
       callbackScope: this,
       loop: true
@@ -47,5 +40,12 @@ class BossLvl1 extends Entity {
 
       }
     }
+  }
+}
+
+class BossLvl1Laser extends Entity {
+  constructor(scene, x, y) {
+    super(scene, x, y, "deathRay");
+    this.body.velocity.y = 200;
   }
 }

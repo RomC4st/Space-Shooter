@@ -86,6 +86,7 @@ class Player extends Entity {
       delay: 1000,
       callback: function () {
         this.scene.sfx.music.stop();
+        this.scene.sfx.boss.stop()
         this.scene.scene.start("SceneGameOver");
       },
       callbackScope: this,
@@ -107,12 +108,7 @@ class EnemyLaser extends Entity {
     this.body.velocity.y = 200;
   }
 }
-class BossLvl1Laser extends Entity {
-  constructor(scene, x, y) {
-    super(scene, x, y, "deathRay");
-    this.body.velocity.y = 200;
-  }
-}
+
 class ChaserShip extends Entity {
   constructor(scene, x, y) {
     super(scene, x, y, "sprEnemy1", "ChaserShip");

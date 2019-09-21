@@ -4,7 +4,21 @@ class SceneEnd extends Phaser.Scene {
   }
 
   create() {
-    this.title = this.add.text(this.game.config.width * 0.5, 128, `CONGRATULATIONS !`, {
+    this.title = this.add.text(this.game.config.width * 0.5, 128, `Congratulations,`, {
+      fontFamily: 'monospace',
+      fontSize: 38,
+      fontStyle: 'bold',
+      color: '#ffffff',
+      align: 'center'
+    });
+    this.text = this.add.text(this.game.config.width * 0.5, 128, `You save the galaxy`, {
+      fontFamily: 'monospace',
+      fontSize: 38,
+      fontStyle: 'bold',
+      color: '#ffffff',
+      align: 'center'
+    });
+    this.displayScore = this.add.text(this.game.config.width * 0.5, 128, `Your score: ${options.points}`, {
       fontFamily: 'monospace',
       fontSize: 38,
       fontStyle: 'bold',
@@ -12,6 +26,9 @@ class SceneEnd extends Phaser.Scene {
       align: 'center'
     });
     this.title.setOrigin(0.5);
+    this.text.setOrigin(0.5, -0.5)
+    this.displayScore.setOrigin(0.5, -1.5)
+
     this.sfx = {
       btnOver: this.sound.add("sndBtnOver"),
       btnDown: this.sound.add("sndBtnDown"),
@@ -48,5 +65,19 @@ class SceneEnd extends Phaser.Scene {
       this.scene.start("SceneMain");
       // console.log(this.Player)
     }, this);
+    this.backgrounds = [];
+    for (var i = 0; i < 5; i++) {
+      var keys = ["sprBg0", "sprBg1"];
+      var key = keys[Phaser.Math.Between(0, keys.length - 1)];
+      var bg = new ScrollingBackground(this, key, i * 10);
+      this.backgrounds.push(bg);
+    }
+  };
+
+  update() {
+    for (var i = 0; i < this.backgrounds.length; i++) {
+      this.backgrounds[i].update();
+    }
   }
-}
+  }
+  

@@ -5,7 +5,7 @@ options = {
   life: 3,
   livesText: '',
   bossLvl1: true,
-  bossLvl1Life: 15
+  bossLvl1Life: 30
 }
 
 class SceneMain extends Phaser.Scene {
@@ -36,11 +36,12 @@ class SceneMain extends Phaser.Scene {
       frameWidth: 28,
       frameHeight: 21
     });
-    this.load.spritesheet("deathRay", "content/death-ray.png", {
+    this.load.spritesheet("deathRay", "content/sprDeath-ray.png", {
       frameWidth: 39,
       frameHeight: 39
     });
     this.load.audio("SoundLvl1", "content/SoundLvl1.mp3");
+    this.load.audio("BossLvl1", "content/BossLvl1.mp3");
     this.load.audio("sndExplode0", "content/sndExplode0.wav");
     this.load.audio("sndExplode1", "content/sndExplode1.wav");
     this.load.audio("sndLaser", "content/sndLaser.wav");
@@ -54,6 +55,12 @@ class SceneMain extends Phaser.Scene {
     this.anims.create({
       key: "sprEnemy0",
       frames: this.anims.generateFrameNumbers("sprEnemy0"),
+      frameRate: 20,
+      repeat: -1
+    });
+    this.anims.create({
+      key: "deathRay",
+      frames: this.anims.generateFrameNumbers("deathRay"),
       frameRate: 20,
       repeat: -1
     });
@@ -87,9 +94,9 @@ class SceneMain extends Phaser.Scene {
         this.sound.add("sndExplode0"),
         this.sound.add("sndExplode1")
       ],
-      laser: this.sound.add("sndLaser")
+      laser: this.sound.add("sndLaser"),
+      boss: this.sound.add("BossLvl1")
     };
-
     this.sfx.music.play();
     this.sfx.laser.volume = 0.3
     this.sfx.explosions.volume = 0.5
@@ -114,7 +121,7 @@ class SceneMain extends Phaser.Scene {
     this.left = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
     this.right = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
     this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
-    this.restart = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.C);
+    this.restart = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.ESC);
 
     this.playerLasers = this.add.group();
     this.enemies = this.add.group();
@@ -129,7 +136,6 @@ class SceneMain extends Phaser.Scene {
             options.bossLvl1Life -= 1)
         }
         else if (enemy.onDestroy !== undefined) {
-
           enemy.onDestroy();
           options.points += 10;
           options.scoreText.setText('score: ' + options.points);
@@ -168,7 +174,9 @@ class SceneMain extends Phaser.Scene {
       callback: function () {
         var enemy = null;
 
-        if (options.bossLvl1 === true && options.points > 500) {
+        if (options.bossLvl1 === true && options.points > 0) {
+          this.sfx.music.stop()
+          this.sfx.boss.play()
           enemy = new BossLvl1(
             this,
             Phaser.Math.Between(0, 0),
@@ -233,6 +241,7 @@ class SceneMain extends Phaser.Scene {
       }
       else if (this.restart.isDown) {
         this.sfx.music.stop()
+        this.sfx.boss.stop()
         this.scene.start("SceneMainMenu");
       }
 
