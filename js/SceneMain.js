@@ -36,6 +36,10 @@ class SceneMain extends Phaser.Scene {
       frameWidth: 28,
       frameHeight: 21
     });
+    this.load.spritesheet("sprPlayer_Shot", "content/sprPlayer_Shot.png", {
+      frameWidth: 28,
+      frameHeight: 21
+    });
     this.load.spritesheet("deathRay", "content/sprDeath-ray.png", {
       frameWidth: 39,
       frameHeight: 39
@@ -58,9 +62,16 @@ class SceneMain extends Phaser.Scene {
       frameRate: 20,
       repeat: -1
     });
+
     this.anims.create({
       key: "deathRay",
       frames: this.anims.generateFrameNumbers("deathRay"),
+      frameRate: 20,
+      repeat: -1
+    });
+    this.anims.create({
+      key: "sprPlayer_Shot",
+      frames: this.anims.generateFrameNumbers("sprPlayer_Shot"),
       frameRate: 20,
       repeat: -1
     });
@@ -97,6 +108,7 @@ class SceneMain extends Phaser.Scene {
       laser: this.sound.add("sndLaser"),
       boss: this.sound.add("BossLvl1")
     };
+
     this.sfx.music.play();
     this.sfx.laser.volume = 0.3
     this.sfx.explosions.volume = 0.5
@@ -136,6 +148,11 @@ class SceneMain extends Phaser.Scene {
             options.bossLvl1Life -= 1)
         }
         else if (enemy.onDestroy !== undefined) {
+          if (enemy.getData('type') === 'BossLvl1') {
+            options.points += 100;
+
+            options.scoreText.setText('score: ' + options.points);
+          }
           enemy.onDestroy();
           options.points += 10;
           options.scoreText.setText('score: ' + options.points);
@@ -156,8 +173,10 @@ class SceneMain extends Phaser.Scene {
       if (!player.getData("isDead") &&
         !laser.getData("isDead")) {
         if (options.life > 0) {
+          player.setTexture('sprPlayer_Shot')
           options.life -= 1;
           options.livesText.setText('lives: ' + options.life);
+
           player.explode(false, laser);
           laser.destroy();
         } if (options.life === 0) {
@@ -174,7 +193,7 @@ class SceneMain extends Phaser.Scene {
       callback: function () {
         var enemy = null;
 
-        if (options.bossLvl1 === true && options.points > 0) {
+        if (options.bossLvl1 === true && options.points > 500) {
           this.sfx.music.stop()
           this.sfx.boss.play()
           enemy = new BossLvl1(

@@ -14,6 +14,7 @@ class Entity extends Phaser.GameObjects.Sprite {
       }
       else {
         if(options.bossLvl1Life===0){
+          this.scene.sfx.boss.stop();
           this.scene.scene.start('SceneEnd')
         }
         // Set the texture to the explosion image, then play the animation
